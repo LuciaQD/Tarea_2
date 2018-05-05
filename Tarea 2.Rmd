@@ -1,0 +1,86 @@
+---
+title: "Tarea 2"
+author: "Lucía Quintero"
+date: "5 de mayo de 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Entrega
+
+La tarea debe ser realizada en RMarkdown en un repositorio de GitHub llamado "Tarea 2".
+La tarea es individual por lo que cada uno tiene que escribir su propia versión de la misma. 
+El repositorio debe contener unicamente el archivo .Rmd con la solución de la tarea.
+
+## Ejercicio 1
+
+Los datos que vamos a utilizar en este ejercicio están disponibles en el catálogo de datos abiertos uruguay https://catalogodatos.gub.uy.
+Los datos que seleccioné son sobre las emisiones de dióxido de carbono (CO2) correspondientes a las actividades de quema de los combustibles en las industrias de la energía y los sectores de consumo. Se incluyen también emisiones de CO2 provenientes de la quema de biomasa y de bunkers internacionales, las cuales se presentan como partidas informativas ya que no se consideran en los totales. En el siguiente link se encuentrán los datos y los meta datos con información que describe la base de datos https://catalogodatos.gub.uy/dataset/emisiones-de-co2-por-sector.
+
+Debe leer con cuidado la información en los meta datos para responder correctamente.
+
+```{r, message=FALSE, warning=FALSE, results='asis', echo=FALSE}
+library(tidyverse)
+library(xtable)
+
+dat <- read.csv("emisiones.csv", header = TRUE, dec = ",") %>%
+  rename(AÑO = AÃ.O)
+metadat <- read.csv("metadata_emision.csv", header = TRUE) 
+
+# xtable(metadat[,-2], align = 'ccp{2cm}p{8cm}' )  %>%
+#   print( include.rownames = FALSE)
+
+dato_emision<- gather(dat, key = fuente, value = emision, -AÑO)
+
+``` 
+
+Los datos fueron reestructurados para simplificar  la exploración, de la siguente manera:
+
+```{r, message=FALSE, warning=FALSE, results='asis', echo=TRUE, eval=FALSE}
+library(tidyverse)
+dato_emision<- gather(dat, key = fuente, value = emisión, -AÑO)
+```
+
+Con estos datos responda las sigueintes preguntas:
+
+ 1. Usando las funciones de la librería `dplyr` obtenga qué fuentes tienen la emisión máxima. Recuerde que TOTAL debería ser excluído para esta respuesta.
+
+ 2. ¿En qué año se dió la emisión máxima para la fuente que respondió en la pregunta anterior?
+
+3. Usando las funciones de la librería `dplyr` obtenga las 5 fuentes, sin incluir TOTAL, qué tienen un valor medio de emisión a lo largo de todos los años más grandes. 
+
+4. Usando ggplot2 realice un gráfico de las emisiones a lo largo de los años para cada fuente. Utilice dos elementos geométricos, puntos y lineas. 
+Selecciones para dibujar solamente las 5 fuentes que a lo largo de los años tienen una emisión media mayor que el resto (respuesta de la pregunta 3).
+Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
+
+5. Relplique el siguiente gráfico usando ggplot2.
+
+6. Usando la librería ggplot2 y ggpmisc replique el siguiente gráfico de las emisiones totales entre 1990 y 2016.
+Los puntos rojos indican los máximos locales  o picos de emisión de CO2 en Gg. 
+Use `library(help = ggpmisc)` para ver todas las funciones de la librería ggpmisc e identificar cual o cuales necesita para replicar el gráfico.
+
+
+## Ejercicio 2
+
+Los datos que vamos a utilizar en este ejercicio están disponibles en el catálogo de datos abiertos uruguay https://catalogodatos.gub.uy.
+
+Los datos que seleccioné son sobre los gastos realizados por actos médicos
+Los datos y los metadatos se encuentran disponibles en:
+
+https://catalogodatos.gub.uy/dataset/gasto_am_2016_fondo-nacional-de-recursos/resource/936ac9e6-b0f6-424a-9b53-ee408a91fd6f
+
+Este ejercicio tiene como objetivo que realice un análisis exploratorio de datos utilizando todo lo aprendido en el curso.
+Debe contener al menos 5 preguntas orientadoras y visualizaciones apropiadas para responderlas. 
+La exploración deberá contener las preguntas a responder sus respuestas con el correspondiente resumen de información o visualización. 
+Incluya en su exploración el análisis de la variabilidad tanto de  variables cuantitativas como cualitativas y covariaciones entre las mismas. 
+Recuerde que en las visualizaciones, las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
+
+```{r, echo=FALSE}
+
+gastos <- read.csv("gastosmed.csv", header = TRUE, dec = ",") 
+
+```
