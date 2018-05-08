@@ -1,7 +1,7 @@
 ---
 title: "Tarea 2"
 author: "Lucía Quintero"
-date: "5 de mayo de 2018"
+date: "14 de mayo de 2018"
 output: pdf_document
 ---
 
@@ -41,21 +41,73 @@ dato_emision<- gather(dat, key = fuente, value = emision, -AÑO)
 Los datos fueron reestructurados para simplificar  la exploración, de la siguente manera:
 
 ```{r, message=FALSE, warning=FALSE, results='asis', echo=TRUE, eval=FALSE}
-library(tidyverse)
+
+#library(tidyverse)
+
 dato_emision<- gather(dat, key = fuente, value = emisión, -AÑO)
+
 ```
 
 Con estos datos responda las sigueintes preguntas:
 
  1. Usando las funciones de la librería `dplyr` obtenga qué fuentes tienen la emisión máxima. Recuerde que TOTAL debería ser excluído para esta respuesta.
+ 
+```{r, echo = FALSE} 
+
+dato_emision %>%
+  na.omit() %>%  
+  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>%
+  group_by(fuente) %>%
+  summarise(Total_emision = sum(emision)) %>%
+  ungroup() %>%
+  arrange(-Total_emision)
+ 
+```
+
+La fuente de mayor emisión es la quema de biomasa.
 
  2. ¿En qué año se dió la emisión máxima para la fuente que respondió en la pregunta anterior?
+ 
+```{r, echo = FALSE}
+
+dato_emision %>%
+  filter(fuente == 'Q_B') %>%
+  arrange(-emision)
+
+```
+
+En el año 2016.
 
 3. Usando las funciones de la librería `dplyr` obtenga las 5 fuentes, sin incluir TOTAL, qué tienen un valor medio de emisión a lo largo de todos los años más grandes. 
+
+```{r, echo = FALSE}
+
+dato_emision %>%
+  na.omit() %>%  
+  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>%
+  group_by(fuente) %>%
+  summarise(Media_emision = mean(emision)) %>%
+  ungroup() %>%
+  top_n(5, Media_emision) %>%
+  arrange(-Media_emision)
+
+```
 
 4. Usando ggplot2 realice un gráfico de las emisiones a lo largo de los años para cada fuente. Utilice dos elementos geométricos, puntos y lineas. 
 Selecciones para dibujar solamente las 5 fuentes que a lo largo de los años tienen una emisión media mayor que el resto (respuesta de la pregunta 3).
 Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
+
+```{r, echo = FALSE}
+
+dato_emision %>%
+  na.omit() %>%
+  ggplot(subset(fuente == "Q_B & T & BI & CE_SP & I") +
+           geom_point(aes(x = AÑO, y = emision, color = fuente)) +
+    geom_smooth(se = FALSE))
+  
+  
+
+```
 
 5. Relplique el siguiente gráfico usando ggplot2.
 
