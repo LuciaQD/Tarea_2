@@ -2,7 +2,9 @@
 title: "Tarea 2"
 author: "Lucía Quintero"
 date: "14 de mayo de 2018"
-output: pdf_document
+output: 
+  pdf_document: default
+  fig_caption: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -31,7 +33,7 @@ dat <- read.csv("emisiones.csv", header = TRUE, dec = ",") %>%
   rename(AÑO = AÃ.O)
 metadat <- read.csv("metadata_emision.csv", header = TRUE) 
 
-# xtable(metadat[,-2], align = 'ccp{2cm}p{8cm}' )  %>%
+#xtable(metadat[,-2], align = 'ccp{2cm}p{8cm}' )  %>%
 #   print( include.rownames = FALSE)
 
 dato_emision<- gather(dat, key = fuente, value = emision, -AÑO)
@@ -50,38 +52,37 @@ dato_emision<- gather(dat, key = fuente, value = emision, -AÑO)
 
 Con estos datos responda las sigueintes preguntas:
 
- 1. Usando las funciones de la librería `dplyr` obtenga qué fuentes tienen la emisión máxima. Recuerde que TOTAL debería ser excluído para esta respuesta.
+1.  Usando las funciones de la librería `dplyr` obtenga qué fuentes tienen la emisión máxima. Recuerde que TOTAL debería ser excluído para esta respuesta así como los subtotales.
  
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
-dato_emision %>%
+resp1 <- dato_emision %>%
   na.omit() %>%  
-  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>% #se sacan los totales y subtotales
+  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>% 
   group_by(fuente) %>%
   summarise(Total_emision = sum(emision)) %>%
   filter(Total_emision == max(Total_emision))
-  #arrange(-Total_emision)
- 
+
 ```
 
-La fuente de mayor emisión es la quema de biomasa.
+La fuente de mayor emisión es la quema de biomasa (Q_B).
 
- 2. ¿En qué año se dió la emisión máxima para la fuente que respondió en la pregunta anterior?
+2. ¿En qué año se dió la emisión máxima para la fuente que respondió en la pregunta anterior?
  
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
-dato_emision %>%
+resp2 <- dato_emision %>%
   filter(fuente == 'Q_B'& emision == max(emision, na.rm = TRUE))
 
 ```
 
-La emisión máxima para la fuente de quema de biomasa se dió en el año 2016.
+La emisión máxima para la quema de biomasa se dió en el año 2016.
 
-3. Usando las funciones de la librería `dplyr` obtenga las 5 fuentes, sin incluir TOTAL, qué tienen un valor medio de emisión a lo largo de todos los años más grandes. 
+3.  Usando las funciones de la librería `dplyr` obtenga las 5 fuentes, sin incluir TOTAL ni subtotales, qué tienen un valor medio de emisión a lo largo de todos los años más grandes. 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
-dato_emision %>%
+resp3 <- dato_emision %>%
   filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>%
   group_by(fuente) %>%
   summarise(Media_emision = mean(emision, na.rm = TRUE)) %>%
@@ -90,11 +91,19 @@ dato_emision %>%
 
 ```
 
+Las 5 fuentes que tienen un valor medio de emisión a lo largo de todos los años más grandes son: quema de biomasa(Q_B), transporte(T), búnkers internacionales(BI), centrales eléctricas servicio público(CE_SP)e industrial(I).
+
 4. Usando ggplot2 realice un gráfico de las emisiones a lo largo de los años para cada fuente. Utilice dos elementos geométricos, puntos y lineas. 
 Selecciones para dibujar solamente las 5 fuentes que a lo largo de los años tienen una emisión media mayor que el resto (respuesta de la pregunta 3).
 Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE} 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+cap1 <- "Los gráficos muestran claramente lo que ya se había mencionado en las respuestas anteriores. La fuente de mayor emisión es la quema de biomasa la que ha tenido un fuerte incremento a partir del año 2004. El transporte muestra también un incremento a partir del año 2003 pero en menor medida que la quema de biomasa. Las otras fuentes muestran un comportamiento más estable, incluso con una tendencia a la baja."
+
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap1} 
 
 dato_emision %>%
   filter(fuente==c("CE_SP","Q_B","T","BI","I")) %>% 
@@ -107,11 +116,16 @@ dato_emision %>%
 
 ```
 
-Figura 1.
-
 5. Relplique el siguiente gráfico usando ggplot2.
+Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE} 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+cap2 <- "Hola estoy probando"
+
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 5.5, fig.cap = cap2} 
 
 dato_emision %>%
   filter(fuente == c("CE_SP","Q_B","T","BI","I")) %>% 
@@ -127,8 +141,16 @@ dato_emision %>%
 6. Usando la librería ggplot2 y ggpmisc replique el siguiente gráfico de las emisiones totales entre 1990 y 2016.
 Los puntos rojos indican los máximos locales  o picos de emisión de CO2 en Gg. 
 Use `library(help = ggpmisc)` para ver todas las funciones de la librería ggpmisc e identificar cual o cuales necesita para replicar el gráfico.
+Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE} 
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+cap3 <- "Hola estoy probando"
+
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 5.5, fig.cap = cap3} 
+
 #install.packages('ggpmisc')
 library(ggpmisc)
 
