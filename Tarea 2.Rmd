@@ -8,9 +8,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 50), tidy = TRUE, fig.pos = 'h', out.extra = '')
 ```
-
 
 ## Entrega
 
@@ -26,6 +25,7 @@ Los datos que seleccioné son sobre las emisiones de dióxido de carbono (CO2) cor
 Debe leer con cuidado la información en los meta datos para responder correctamente.
 
 ```{r, message=FALSE, warning=FALSE, results='asis', echo=FALSE}
+
 library(tidyverse)
 library(xtable)
 
@@ -97,13 +97,9 @@ Las 5 fuentes que tienen un valor medio de emisión a lo largo de todos los años 
 Selecciones para dibujar solamente las 5 fuentes que a lo largo de los años tienen una emisión media mayor que el resto (respuesta de la pregunta 3).
 Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap1} 
 
 cap1 <- "Los gráficos muestran claramente lo que ya se había mencionado en las respuestas anteriores. La fuente de mayor emisión es la quema de biomasa la que ha tenido un fuerte incremento a partir del año 2004. El transporte muestra también un incremento a partir del año 2003 pero en menor medida que la quema de biomasa. Las otras fuentes muestran un comportamiento más estable, incluso con una tendencia a la baja."
-
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap1} 
 
 dato_emision %>%
   filter(fuente==c("CE_SP","Q_B","T","BI","I")) %>% 
@@ -119,13 +115,12 @@ dato_emision %>%
 5. Relplique el siguiente gráfico usando ggplot2.
 Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+\newpage
+![](box.pdf)
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 5, fig.cap = cap2} 
 
 cap2 <- "Hola estoy probando"
-
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 5.5, fig.cap = cap2} 
 
 dato_emision %>%
   filter(fuente == c("CE_SP","Q_B","T","BI","I")) %>% 
@@ -143,16 +138,15 @@ Los puntos rojos indican los máximos locales  o picos de emisión de CO2 en Gg.
 Use `library(help = ggpmisc)` para ver todas las funciones de la librería ggpmisc e identificar cual o cuales necesita para replicar el gráfico.
 Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
+![](ggmisc.pdf)
+\newpage
 
-cap3 <- "Hola estoy probando"
-
-```
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 5.5, fig.cap = cap3} 
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 5, fig.cap = cap3} 
 
 #install.packages('ggpmisc')
 library(ggpmisc)
+
+cap3 <- "Hola estoy probando"
 
 dato_emision %>%
   filter(fuente == 'TOTAL') %>%
@@ -171,7 +165,7 @@ dato_emision %>%
 
 Los datos que vamos a utilizar en este ejercicio están disponibles en el catálogo de datos abiertos uruguay https://catalogodatos.gub.uy.
 
-Los datos que seleccioné son sobre los gastos realizados por actos médicos
+Los datos que seleccioné son sobre los gastos realizados por actos médicos.
 Los datos y los metadatos se encuentran disponibles en:
 
 https://catalogodatos.gub.uy/dataset/gasto_am_2016_fondo-nacional-de-recursos/resource/936ac9e6-b0f6-424a-9b53-ee408a91fd6f
@@ -186,4 +180,120 @@ Recuerde que en las visualizaciones, las etiquetas de los ejes deben ser claras 
 
 gastos <- read.csv("gastosmed.csv", header = TRUE, dec = ",") 
 
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  ggplot(aes(x = fct_infreq(Prestacion))) + 
+  geom_bar() +
+  coord_flip() + 
+  labs(y = "Frecuencia", x = "Prestaciones" )
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+   mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR"))%>%
+  #filter(!is.na(Prestacion))%>%
+  #filter(!is.na(Ubicacion))%>%
+  ggplot(aes(x = fct_infreq(Prestacion))) + 
+  geom_bar() +
+  facet_wrap(~Ubicacion) +
+  coord_flip() + 
+  labs(y = "Frecuencia", x = "Prestaciones" )
+ 
+
+```
+
+```{r,echo=FALSE}
+
+gastos%>%
+  na.omit()%>%
+  group_by(Prestacion)%>%
+  summarise(Gasto_total = sum(Importe))%>%
+  arrange(desc(Gasto_total))%>%
+  top_n(5,Gasto_total)
+
+```
+
+```{r, echo=FALSE}
+
+gastos %>%
+  group_by(Prestador_departamento) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))%>%
+  top_n(5,n)
+
+```
+
+```{r,echo=FALSE}
+
+gastos%>%
+  filter(Prestador_departamento == c("MONTEVIDEO","CANELONES","MALDONADO","COLONIA","PASANDU"))%>%
+  filter(Prestacion == c("DIALISIS - HEMODIALISIS","CIRUGIA CARDIACA ADULTO","PCI-ATCP c/cateterismo izq.","PROTESIS DE RODILLA IMPLANTE","PROTESIS DE CADERA POR ARTROSIS")) %>%
+  ggplot(aes(x = Prestador_departamento, fill = Prestacion)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+```{r,echo=FALSE}
+gastos%>%
+  filter(Importe == max(Importe,na.rm = TRUE))
+
+```
+
+```{r,echo=FALSE}
+
+gastos%>%
+  filter(Prestador_departamento != 'MONTEVIDEO')%>%
+  ggplot(aes(x = Prestador_departamento, fill = Prestador_tipo)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90))
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  ggplot(aes(Prestador_tipo, Importe)) + 
+  geom_boxplot()
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  filter(Sexo == 'M')%>%
+  ggplot(aes(Edad_aÃ.os, Importe, colour = Sexo)) + 
+  geom_point() 
+  #facet_wrap(~Sexo)
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  ggplot(aes(Edad_aÃ.os, fill = Sexo)) +
+  geom_histogram() + 
+  facet_wrap(~Sexo)
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR"))
+
+```
+
+```{r, echo=FALSE}
+
+gastos%>%
+  filter(Prestacion == c("DIALISIS - HEMODIALISIS","CIRUGIA CARDIACA ADULTO","PCI-ATCP c/cateterismo izq.","PROTESIS DE RODILLA IMPLANTE","PROTESIS DE CADERA POR ARTROSIS")) %>%
+  ggplot(aes(Edad_aÃ.os, fill = Prestacion)) +
+  geom_bar()
+  
 ```
