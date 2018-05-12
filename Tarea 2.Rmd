@@ -176,15 +176,34 @@ La exploración deberá contener las preguntas a responder sus respuestas con el c
 Incluya en su exploración el análisis de la variabilidad tanto de  variables cuantitativas como cualitativas y covariaciones entre las mismas. 
 Recuerde que en las visualizaciones, las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con algún comentario de interés que describa el gráfico.
 
-```{r, echo=FALSE}
+```{r, echo = FALSE}
 
 gastos <- read.csv("gastosmed.csv", header = TRUE, dec = ",") 
 
 ```
 
-```{r, echo=FALSE}
+Para comenzar la exploración vamos a ver que variables contiene la base de datos y a realizar un pequeño análisis de las mismas para luego plantearnos las preguntas de exploración.
 
-gastos%>%
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+a <- summary(gastos)
+b <- str(gastos)
+
+```
+
+La base se compone de 9 variables, de las cuales 6 son categóricas (Prestación, Sexo, Departamento_residencia, Prestador, Prestador_tipo y Prestador_departamento), 2 continuas (Edad e Importe) quedando la variable Paciente sin clasificar ya que por su definición no la vamos a utilizar, esta nos indica el número de paciente.
+
+Con respecto a los datos faltantes en la mayoría de las variables existe la opción "Otro" que no necesariamente refiere a éstos, a lo largo del análisis veremos que importancia tienen. La única variables que tiene la opción "SIN DATO" es Prestador_departamento, la cual en un principio la incluimos en el análisis.
+
+##Análisis exploratorio.
+
+1) La primer pregunta que me surge es cuáles son las prestaciones más brindadas por lo prestadores de salud. Para poder visualizar ésto se realiza un gráfico de barras ordenado por la frecuencia de las prestaciones.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap4}
+
+cap4 <- "A partir del gráfico se puede  observar que hay un total de 30 prestaciones, observandose una gran concentración en las tres más frecuentes: PCI-Cateterismo izq.adultos,DIALISIS-HEMODIALISIS y PCI-ATCP c/cateterismo izq."
+
+gastos %>%
   ggplot(aes(x = fct_infreq(Prestacion))) + 
   geom_bar() +
   coord_flip() + 
@@ -192,41 +211,63 @@ gastos%>%
 
 ```
 
-```{r, echo=FALSE}
+Para verificar la observación mencionada en el gráfico vamos a realizar la tabla de frecuencias relativas y acumuladas.
 
-gastos%>%
-   mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR"))%>%
-  #filter(!is.na(Prestacion))%>%
-  #filter(!is.na(Ubicacion))%>%
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+
+gastos %>%
+  group_by(Prestacion) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  mutate(Frec_rel = n/sum(n), Rec_acum = cumsum(Frec_rel))
+
+```
+
+La tabla nos muestra que las tres prestaciones más brindadas representan el 50% del total.
+
+2) Luego de explorar cuales son las prestaciones más habituales me interesa ver en dónde se realizan, para lo que realizamos un gráfico de barras por departamento del prestador.
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap5}
+
+cap5 <- "Del g'rafico se desprende que la amplia mayoria de prestaciones se brindan en el departamento de Montevideo, segudio por  Canelones, Maldonado y Colonia, todos departamentos del Sur del país."
+
+gastos %>%
+  ggplot(aes(x = fct_infreq(Prestador_departamento))) + 
+  geom_bar() +
+  coord_flip()+
+  labs(y = "Frecuencia", x = "Departamento del prestador de salud")
+
+```
+
+3) A partir de lo observado en los gráficos anteriores me interesa separar los departamentos de los prestadores de salud en dos categorías, Montevideo e Interior, y observar si las principales prestaciones estan concentradas en Montevideo o no.
+
+```{r, echo=FALSE,message = FALSE, warning = FALSE, fig.cap = cap6}
+
+cap6 <- "En el gráfico podemos observar que las tres prestaciones observadas al principio siguen siendo las más habituales tanto para Montevideo como el Interior.Tambi'n se observa claramente como todas las prestaciones se brindan en mayor medida en Montevideo"
+
+gastos %>%
+   mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR")) %>%
   ggplot(aes(x = fct_infreq(Prestacion))) + 
   geom_bar() +
   facet_wrap(~Ubicacion) +
   coord_flip() + 
   labs(y = "Frecuencia", x = "Prestaciones" )
- 
 
 ```
+
+4) Luego de explorar la frecuencia de las prestaciones y como se relacionaban con los departamentos de los prestadoresme interesa ver si la frecuencia de las mismas está relacionada con el gastos. Para esto realizamos un cuadro donde se muestra el top 10 de las prestaciones con mayor gasto total.
 
 ```{r,echo=FALSE}
 
-gastos%>%
-  na.omit()%>%
-  group_by(Prestacion)%>%
-  summarise(Gasto_total = sum(Importe))%>%
-  arrange(desc(Gasto_total))%>%
-  top_n(5,Gasto_total)
-
-```
-
-```{r, echo=FALSE}
-
 gastos %>%
-  group_by(Prestador_departamento) %>%
-  summarise(n = n()) %>%
-  arrange(desc(n))%>%
-  top_n(5,n)
+  group_by(Prestacion) %>%
+  summarise(Gasto_total = sum(Importe)) %>%
+  arrange(desc(Gasto_total)) %>%
+  top_n(10)
 
 ```
+Podemos observar que dos de las prestaciones que observamos como las más frecuentes se encuentran también en el top 3 de mayor gasto, quedando en el 7 lugar PCI-Cateteri
+
 
 ```{r,echo=FALSE}
 
