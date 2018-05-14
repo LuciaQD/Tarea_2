@@ -31,6 +31,7 @@ library(xtable)
 
 dat <- read.csv("emisiones.csv", header = TRUE, dec = ",") %>%
   rename(AÑO = AÃ.O)
+
 metadat <- read.csv("metadata_emision.csv", header = TRUE) 
 
 #xtable(metadat[,-2], align = 'ccp{2cm}p{8cm}' )  %>%
@@ -57,12 +58,12 @@ Con estos datos responda las sigueintes preguntas:
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
 resp1 <- dato_emision %>%
-  na.omit() %>%  
-  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>% 
+  na.omit() %>%
+  filter(fuente != 'TOTAL' & fuente != 'S_C' & fuente != 'I_E') %>%
   group_by(fuente) %>%
   summarise(Total_emision = sum(emision)) %>%
   filter(Total_emision == max(Total_emision))
-
+  
 ```
 
 La fuente de mayor emisión es la quema de biomasa (Q_B).
@@ -120,12 +121,12 @@ Incluir un `caption` en la figura con algún comentario de interés que describa e
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 5, fig.cap = cap2} 
 
-cap2 <- "Hola estoy probando"
+cap2 <- "A partir del gráfico se reafirma lo que venimos viendo en las partes anterores, la quema de biomasa es la fuente que genera mayor emisión. A su vez podemos ver que las fuentes de búnkers internacionalese e industrial presentan datos atípicos."
 
 dato_emision %>%
   filter(fuente == c("CE_SP","Q_B","T","BI","I")) %>% 
   filter(!is.na(emision)) %>% 
-  ggplot(aes(x = fct_reorder(fuente, emision, fun=median, .desc=TRUE), y = emision)) +
+  ggplot(aes(x = fct_reorder(fuente, emision, fun = median, .desc=TRUE), y = emision)) +
   geom_boxplot() +
   geom_line() +
   scale_y_continuous(breaks = seq(0, 7500, 2500)) +
@@ -146,18 +147,20 @@ Incluir un `caption` en la figura con algún comentario de interés que describa e
 #install.packages('ggpmisc')
 library(ggpmisc)
 
-cap3 <- "Hola estoy probando"
+cap3 <- "Se observa un comportamiento ciclico ascendente, donde despúes de un pico hay un caída para luego volver a subir en mayor grado que el pico anterior.  "
 
 dato_emision %>%
   filter(fuente == 'TOTAL') %>%
-  filter(!is.na(emision))%>%
+  filter(!is.na(emision)) %>%
   ggplot(aes(x = AÑO, y = emision)) +
   geom_line() +
   geom_point() +
   labs(x = "Año", y = "Emisión de CO2 en Gg") +
   stat_peaks(colour = "red") +
-  stat_peaks(geom = "text", colour = "red", vjust = -0.5)
-
+  stat_peaks(geom = "text",
+  colour = "red",
+  vjust = -0.5)
+  
 ```
 
 
@@ -197,17 +200,17 @@ Con respecto a los datos faltantes en la mayoría de las variables existe la opci
 
 ##Análisis exploratorio.
 
-1) La primer pregunta que me surge es cuáles son las prestaciones más brindadas por lo prestadores de salud. Para poder visualizar ésto se realiza un gráfico de barras ordenado por la frecuencia de las prestaciones.
+1. La primer pregunta que me surge es cuáles son las prestaciones más brindadas por lo prestadores de salud. Para poder visualizar esto se realiza un gráfico de barras ordenado por la frecuencia de las prestaciones.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap4}
 
 cap4 <- "A partir del gráfico se puede  observar que hay un total de 30 prestaciones, observandose una gran concentración en las tres más frecuentes: PCI-Cateterismo izq.adultos,DIALISIS-HEMODIALISIS y PCI-ATCP c/cateterismo izq."
 
 gastos %>%
-  ggplot(aes(x = fct_infreq(Prestacion))) + 
+  ggplot(aes(x = fct_infreq(Prestacion))) +
   geom_bar() +
-  coord_flip() + 
-  labs(y = "Frecuencia", x = "Prestaciones" )
+  coord_flip() +
+  labs(y = "Frecuencia", x = "Prestaciones")
 
 ```
 
@@ -219,43 +222,76 @@ gastos %>%
   group_by(Prestacion) %>%
   summarise(n = n()) %>%
   arrange(desc(n)) %>%
-  mutate(Frec_rel = n/sum(n), Rec_acum = cumsum(Frec_rel))
+  mutate(Frec_rel = n / sum(n), Rec_acum = cumsum(Frec_rel))
 
 ```
 
 La tabla nos muestra que las tres prestaciones más brindadas representan el 50% del total.
 
-2) Luego de explorar cuales son las prestaciones más habituales me interesa ver en dónde se realizan, para lo que realizamos un gráfico de barras por departamento del prestador.
+2. Luego de explorar cuales son las prestaciones más habituales me interesa ver en dónde se realizan, para lo que realizamos un gráfico de barras por departamento del prestador.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap5}
 
-cap5 <- "Del g'rafico se desprende que la amplia mayoria de prestaciones se brindan en el departamento de Montevideo, segudio por  Canelones, Maldonado y Colonia, todos departamentos del Sur del país."
+cap5 <- "Del gráfico se desprende que la amplia mayoria de prestaciones se brindan en el departamento de Montevideo, segudio por Canelones, Maldonado y Colonia, todos departamentos del Sur del país."
 
 gastos %>%
-  ggplot(aes(x = fct_infreq(Prestador_departamento))) + 
+  ggplot(aes(x = fct_infreq(Prestador_departamento))) +
   geom_bar() +
-  coord_flip()+
+  coord_flip() +
   labs(y = "Frecuencia", x = "Departamento del prestador de salud")
 
 ```
 
-3) A partir de lo observado en los gráficos anteriores me interesa separar los departamentos de los prestadores de salud en dos categorías, Montevideo e Interior, y observar si las principales prestaciones estan concentradas en Montevideo o no.
+3. A partir de lo observado en los gráficos anteriores me interesa separar los departamentos de los prestadores de salud en dos categorías, Montevideo e Interior, y observar si las principales prestaciones estan concentradas en Montevideo o no.
 
 ```{r, echo=FALSE,message = FALSE, warning = FALSE, fig.cap = cap6}
 
-cap6 <- "En el gráfico podemos observar que las tres prestaciones observadas al principio siguen siendo las más habituales tanto para Montevideo como el Interior.Tambi'n se observa claramente como todas las prestaciones se brindan en mayor medida en Montevideo"
+cap6 <- "En el gráfico podemos observar que las tres prestaciones observadas al principio siguen siendo las más habituales tanto para Montevideo como el Interior.También se observa claramente como todas las prestaciones se brindan en mayor medida en Montevideo"
 
 gastos %>%
-   mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR")) %>%
-  ggplot(aes(x = fct_infreq(Prestacion))) + 
+  mutate(Ubicacion = ifelse(
+  Prestador_departamento == 'MONTEVIDEO',
+  "MONTEVIDEO",
+  "INTERIOR"
+  )) %>%
+  ggplot(aes(x = fct_infreq(Prestacion))) +
   geom_bar() +
-  facet_wrap(~Ubicacion) +
-  coord_flip() + 
-  labs(y = "Frecuencia", x = "Prestaciones" )
+  facet_wrap( ~ Ubicacion) +
+  coord_flip() +
+  labs(y = "Frecuencia", x = "Prestaciones")
 
 ```
 
-4) Luego de explorar la frecuencia de las prestaciones y como se relacionaban con los departamentos de los prestadoresme interesa ver si la frecuencia de las mismas está relacionada con el gastos. Para esto realizamos un cuadro donde se muestra el top 10 de las prestaciones con mayor gasto total.
+4. Separando los departamentos en la categorías Montevideo e Interior, esta última desgrlozada por los departamentos que la componen, quiero ver que tipo de prestadores predominan (salud publica, mutualistas, seguros privados, etc). Se realizan dos gráficos, uno para cada categoría.
+
+```{r,echo=FALSE,message = FALSE, warning = FALSE, fig.cap = cap7}
+
+cap7 <- "Se observa en todos los departamentos que la mayoria de los prestadores son privados (mutualistas o coperativas). No hay seguros privados ni otros y vemos que la categoría SIN DATO dentro de la variable Prestador_departamento corresponde a servicios de ASSE"
+
+gastos %>%
+  filter(Prestador_departamento != 'MONTEVIDEO') %>%
+  ggplot(aes(x = Prestador_departamento, fill = Prestador_tipo)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(x = "Departamentos del Interior", y = "Frecuencia", fill = "Tipo de prestador")
+  
+```
+
+```{r,echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap8}
+
+cap8 <- "En Montevideo también se observa una amplia mayoría de prestadores privados, incluyendo todas las opciones (mutualistas, seguros privados)."
+
+gastos %>%
+  filter(Prestador_departamento == 'MONTEVIDEO') %>%
+  ggplot(aes(x = Prestador_departamento, fill = Prestador_tipo)) +
+  geom_bar() +
+  labs(x = "Departamento", y = "Frecuencia", fill = "Tipo de prestador")
+
+```
+
+En conclusión, para todo el país predominan los servicios prestados por prestadores privados.
+
+5. Luego de explorar la frecuencia de las prestaciones y como se relacionaban con los departamentos de los prestadores me interesa ver si la frecuencia de las mismas está relacionada con el gasto. Para esto realizamos un cuadro donde se muestra el top 10 de las prestaciones con mayor gasto total.
 
 ```{r,echo=FALSE}
 
@@ -266,75 +302,49 @@ gastos %>%
   top_n(10)
 
 ```
-Podemos observar que dos de las prestaciones que observamos como las más frecuentes se encuentran también en el top 3 de mayor gasto, quedando en el 7 lugar PCI-Cateteri
+Podemos observar que dos de las prestaciones que observamos como las más frecuentes se encuentran también en el top 3 de mayor gasto, quedando PCI-Cateterismo izq.adultos enséptimo lugar con respecto al gasto.
 
+6.Pasando a los pacientes, lo primero que me interesa  ver es la cantidad de pacientes por edad separados por sexo.
 
-```{r,echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap9}
 
-gastos%>%
-  filter(Prestador_departamento == c("MONTEVIDEO","CANELONES","MALDONADO","COLONIA","PASANDU"))%>%
-  filter(Prestacion == c("DIALISIS - HEMODIALISIS","CIRUGIA CARDIACA ADULTO","PCI-ATCP c/cateterismo izq.","PROTESIS DE RODILLA IMPLANTE","PROTESIS DE CADERA POR ARTROSIS")) %>%
-  ggplot(aes(x = Prestador_departamento, fill = Prestacion)) +
+cap9 <- "Parece haber más pacientes del sexo masculino los cuales tienen un pico en el entorno de los 70 añós. Las mujeres parecen tener dos picos, el priero en el entorno de los 50 años y luego otro entorno a las 70 como los hombres"
+
+gastos %>%
+  ggplot(aes(Edad_aÃ.os, fill = Sexo)) + #uso fill porque me gusta que el grafico tenga color
   geom_bar() +
-  theme(axis.text.x = element_text(angle = 90))
+  facet_wrap( ~ Sexo) +
+  labs(x =  "Edad", y = "Número de pacientes")
 
 ```
 
-```{r,echo=FALSE}
-gastos%>%
-  filter(Importe == max(Importe,na.rm = TRUE))
+7. En segundo lugar, me interesa ver la cantidad de pacientes de las tres prestaciones más brindadas por edad y por sexo para lo que se realiza un gráfico de barras.
 
-```
+```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap10}
 
-```{r,echo=FALSE}
+cap10 <- "En relación a las tres prestaciones más brindadas es más notoria la diferencia de pacientes por sexo siendo los hombres quines más reciben estas prestaciones. Para ambos casos los picos se dan entorno a los 70 años."
 
-gastos%>%
-  filter(Prestador_departamento != 'MONTEVIDEO')%>%
-  ggplot(aes(x = Prestador_departamento, fill = Prestador_tipo)) +
-  geom_bar() +
-  theme(axis.text.x = element_text(angle = 90))
-
-```
-
-```{r, echo=FALSE}
-
-gastos%>%
-  ggplot(aes(Prestador_tipo, Importe)) + 
-  geom_boxplot()
-
-```
-
-```{r, echo=FALSE}
-
-gastos%>%
-  filter(Sexo == 'M')%>%
-  ggplot(aes(Edad_aÃ.os, Importe, colour = Sexo)) + 
-  geom_point() 
-  #facet_wrap(~Sexo)
-
-```
-
-```{r, echo=FALSE}
-
-gastos%>%
-  ggplot(aes(Edad_aÃ.os, fill = Sexo)) +
-  geom_histogram() + 
-  facet_wrap(~Sexo)
-
-```
-
-```{r, echo=FALSE}
-
-gastos%>%
-  mutate(Ubicacion = ifelse(Prestador_departamento == 'MONTEVIDEO', "MONTEVIDEO", "INTERIOR"))
-
-```
-
-```{r, echo=FALSE}
-
-gastos%>%
-  filter(Prestacion == c("DIALISIS - HEMODIALISIS","CIRUGIA CARDIACA ADULTO","PCI-ATCP c/cateterismo izq.","PROTESIS DE RODILLA IMPLANTE","PROTESIS DE CADERA POR ARTROSIS")) %>%
+gastos %>%
+  filter(Prestacion == c("DIALISIS - HEMODIALISIS","PCI-ATCP c/cateterismo izq.","PCI-Cateterismo izq.adultos")) %>%
   ggplot(aes(Edad_aÃ.os, fill = Prestacion)) +
-  geom_bar()
+  geom_bar() +
+  facet_wrap(~Sexo) +
+  labs(x = "Edad", y = "Número de pacientes", fill = "Top 3 prestacines")
   
 ```
+
+8. Por último, quiero ver si el gasto esta relacionado a la edad y sexo de los pacientes por lo que realizamos un gáfico de dispersión entre edad e importe separado por sexo.
+
+```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap11}
+
+cap11 <-"Claramente el gráfico realizado no es una buena visualización de nuestra pregunta de exploración, en este caso habría que evaluar otras estrategías que logren mostrar de manera más clara si existe alguna relación entre las variables seleccionadas. A mi entender el principal problema es la variabilidad de valores que toma la variable Importe lo que genera una escala muy grande y no permite una buena visualización. Una estrategia podría ser separar los valores de Importes en rangos y visualizar cada uo por separado. "
+
+gastos %>%
+  ggplot(aes(Edad_aÃ.os, Importe, colour = Sexo)) + #uso colour porque me gusta  el gráfico con colores
+  geom_point() +
+  facet_wrap( ~ Sexo) +
+  labs(x = "Edad", y = "Importe en $")
+  
+```
+
+Quedaron un montón de preguntas sin exponer ya que la idea del trabajo es mostrar una pequeña parte del análisis exploratorio intentando cubbrir todas las variables y las diferentes relaciones entre ellas.
