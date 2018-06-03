@@ -1,6 +1,6 @@
 ---
 title: "Tarea 2"
-author: "LucÌa Quintero"
+author: "Luc√≠a Quintero"
 date: "14 de mayo de 2018"
 output: 
   pdf_document: default
@@ -14,15 +14,15 @@ knitr::opts_chunk$set(echo = TRUE, tidy.opts = list(width.cutoff = 50), tidy = T
 ## Entrega
 
 La tarea debe ser realizada en RMarkdown en un repositorio de GitHub llamado "Tarea 2".
-La tarea es individual por lo que cada uno tiene que escribir su propia versiÛn de la misma. 
-El repositorio debe contener unicamente el archivo .Rmd con la soluciÛn de la tarea.
+La tarea es individual por lo que cada uno tiene que escribir su propia versi√≥n de la misma. 
+El repositorio debe contener unicamente el archivo .Rmd con la soluci√≥n de la tarea.
 
 ## Ejercicio 1
 
-Los datos que vamos a utilizar en este ejercicio est·n disponibles en el cat·logo de datos abiertos uruguay https://catalogodatos.gub.uy.
-Los datos que seleccionÈ son sobre las emisiones de diÛxido de carbono (CO2) correspondientes a las actividades de quema de los combustibles en las industrias de la energÌa y los sectores de consumo. Se incluyen tambiÈn emisiones de CO2 provenientes de la quema de biomasa y de bunkers internacionales, las cuales se presentan como partidas informativas ya que no se consideran en los totales. En el siguiente link se encuentr·n los datos y los meta datos con informaciÛn que describe la base de datos https://catalogodatos.gub.uy/dataset/emisiones-de-co2-por-sector.
+Los datos que vamos a utilizar en este ejercicio est√°n disponibles en el cat√°logo de datos abiertos uruguay https://catalogodatos.gub.uy.
+Los datos que seleccion√© son sobre las emisiones de di√≥xido de carbono (CO2) correspondientes a las actividades de quema de los combustibles en las industrias de la energ√≠a y los sectores de consumo. Se incluyen tambi√©n emisiones de CO2 provenientes de la quema de biomasa y de bunkers internacionales, las cuales se presentan como partidas informativas ya que no se consideran en los totales. En el siguiente link se encuentr√°n los datos y los meta datos con informaci√≥n que describe la base de datos https://catalogodatos.gub.uy/dataset/emisiones-de-co2-por-sector.
 
-Debe leer con cuidado la informaciÛn en los meta datos para responder correctamente.
+Debe leer con cuidado la informaci√≥n en los meta datos para responder correctamente.
 
 ```{r, message=FALSE, warning=FALSE, results='asis', echo=FALSE}
 
@@ -30,30 +30,30 @@ library(tidyverse)
 library(xtable)
 
 dat <- read.csv("emisiones.csv", header = TRUE, dec = ",") %>%
-  rename(A—O = A√.O)
+  rename(A√ëO = A√ëO)
 
-metadat <- read.csv("metadata_emision.csv", header = TRUE) 
+# metadat <- read.csv("metadata_emision.csv", header = TRUE) 
 
 #xtable(metadat[,-2], align = 'ccp{2cm}p{8cm}' )  %>%
 #   print( include.rownames = FALSE)
 
-dato_emision<- gather(dat, key = fuente, value = emision, -A—O)
+dato_emision<- gather(dat, key = fuente, value = emision, -A√ëO)
 
 ``` 
 
-Los datos fueron reestructurados para simplificar  la exploraciÛn, de la siguente manera:
+Los datos fueron reestructurados para simplificar  la exploraci√≥n, de la siguente manera:
 
 ```{r, message=FALSE, warning=FALSE, results='asis', echo=TRUE, eval=FALSE}
 
 #library(tidyverse)
 
-dato_emision<- gather(dat, key = fuente, value = emision, -A—O)
+dato_emision<- gather(dat, key = fuente, value = emision, -A√ëO)
 
 ```
 
 Con estos datos responda las sigueintes preguntas:
 
-1.  Usando las funciones de la librerÌa `dplyr` obtenga quÈ fuentes tienen la emisiÛn m·xima. Recuerde que TOTAL deberÌa ser excluÌdo para esta respuesta asÌ como los subtotales.
+1.  Usando las funciones de la librer√≠a `dplyr` obtenga qu√© fuentes tienen la emisi√≥n m√°xima. Recuerde que TOTAL deber√≠a ser exclu√≠do para esta respuesta as√≠ como los subtotales.
  
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
@@ -66,9 +66,11 @@ resp1 <- dato_emision %>%
   
 ```
 
-La fuente de mayor emisiÛn es la quema de biomasa (Q_B).
+La fuente de mayor emisi√≥n es la quema de biomasa (Q_B).
 
-2. øEn quÈ aÒo se diÛ la emisiÛn m·xima para la fuente que respondiÛ en la pregunta anterior?
+BIEN!
+
+2. ¬øEn qu√© a√±o se di√≥ la emisi√≥n m√°xima para la fuente que respondi√≥ en la pregunta anterior?
  
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
@@ -77,9 +79,11 @@ resp2 <- dato_emision %>%
 
 ```
 
-La emisiÛn m·xima para la quema de biomasa se diÛ en el aÒo 2016.
+La emisi√≥n m√°xima para la quema de biomasa se di√≥ en el a√±o 2016.
 
-3.  Usando las funciones de la librerÌa `dplyr` obtenga las 5 fuentes, sin incluir TOTAL ni subtotales, quÈ tienen un valor medio de emisiÛn a lo largo de todos los aÒos m·s grandes. 
+
+BIEN!
+3.  Usando las funciones de la librer√≠a `dplyr` obtenga las 5 fuentes, sin incluir TOTAL ni subtotales, qu√© tienen un valor medio de emisi√≥n a lo largo de todos los a√±os m√°s grandes. 
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE} 
 
@@ -92,36 +96,38 @@ resp3 <- dato_emision %>%
 
 ```
 
-Las 5 fuentes que tienen un valor medio de emisiÛn a lo largo de todos los aÒos m·s grandes son: quema de biomasa(Q_B), transporte(T), b˙nkers internacionales(BI), centrales elÈctricas servicio p˙blico(CE_SP)e industrial(I).
+Las 5 fuentes que tienen un valor medio de emisi√≥n a lo largo de todos los a√±os m√°s grandes son: quema de biomasa(Q_B), transporte(T), b√∫nkers internacionales(BI), centrales el√©ctricas servicio p√∫blico(CE_SP)e industrial(I).
 
-4. Usando ggplot2 realice un gr·fico de las emisiones a lo largo de los aÒos para cada fuente. Utilice dos elementos geomÈtricos, puntos y lineas. 
-Selecciones para dibujar solamente las 5 fuentes que a lo largo de los aÒos tienen una emisiÛn media mayor que el resto (respuesta de la pregunta 3).
-Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con alg˙n comentario de interÈs que describa el gr·fico.
+BIEN!
+4. Usando ggplot2 realice un gr√°fico de las emisiones a lo largo de los a√±os para cada fuente. Utilice dos elementos geom√©tricos, puntos y lineas. 
+Selecciones para dibujar solamente las 5 fuentes que a lo largo de los a√±os tienen una emisi√≥n media mayor que el resto (respuesta de la pregunta 3).
+Las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con alg√∫n comentario de inter√©s que describa el gr√°fico.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap1} 
 
-cap1 <- "Los gr·ficos muestran claramente lo que ya se habÌa mencionado en las respuestas anteriores. La fuente de mayor emisiÛn es la quema de biomasa la que ha tenido un fuerte incremento a partir del aÒo 2004. El transporte muestra tambiÈn un incremento a partir del aÒo 2003 pero en menor medida que la quema de biomasa. Las otras fuentes muestran un comportamiento m·s estable, incluso con una tendencia a la baja."
+cap1 <- "Los gr√°ficos muestran claramente lo que ya se hab√≠a mencionado en las respuestas anteriores. La fuente de mayor emisi√≥n es la quema de biomasa la que ha tenido un fuerte incremento a partir del a√±o 2004. El transporte muestra tambi√©n un incremento a partir del a√±o 2003 pero en menor medida que la quema de biomasa. Las otras fuentes muestran un comportamiento m√°s estable, incluso con una tendencia a la baja."
 
 dato_emision %>%
   filter(fuente==c("CE_SP","Q_B","T","BI","I")) %>% 
   filter(!is.na(emision)) %>% 
-  ggplot(aes(x = A—O, y = emision)) + 
+  ggplot(aes(x = A√ëO, y = emision)) + 
   geom_point() +
   geom_line() +
   facet_wrap(~fuente) +
-  labs(x = "AÒos", y = "EmisiÛn de CO2 en Gg")
+  labs(x = "A√±os", y = "Emisi√≥n de CO2 en Gg")
 
 ```
+OJO!! SI MIR√Å VAS A VER QUE NO HAY UN PUNTO PARA CADA A√ëO ESTO PASA PORQUE CUANDO EST√ÅS FILTRANDO POR UN VECTOR DE CARACTERES SE DEBE HACER USANDO `%in%` NO USANDO `==` `filter(fuente%in%c("CE_SP","Q_B","T","BI","I"))`. 
 
-5. Relplique el siguiente gr·fico usando ggplot2.
-Incluir un `caption` en la figura con alg˙n comentario de interÈs que describa el gr·fico.
+5. Relplique el siguiente gr√°fico usando ggplot2.
+Incluir un `caption` en la figura con alg√∫n comentario de inter√©s que describa el gr√°fico.
 
 \newpage
 ![](box.pdf)
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 5, fig.cap = cap2} 
 
-cap2 <- "A partir del gr·fico se reafirma lo que venimos viendo en las partes anterores, la quema de biomasa es la fuente que genera mayor emisiÛn. A su vez podemos ver que las fuentes de b˙nkers internacionalese e industrial presentan datos atÌpicos."
+cap2 <- "A partir del gr√°fico se reafirma lo que venimos viendo en las partes anterores, la quema de biomasa es la fuente que genera mayor emisi√≥n. A su vez podemos ver que las fuentes de b√∫nkers internacionalese e industrial presentan datos at√≠picos."
 
 dato_emision %>%
   filter(fuente == c("CE_SP","Q_B","T","BI","I")) %>% 
@@ -130,14 +136,15 @@ dato_emision %>%
   geom_boxplot() +
   geom_line() +
   scale_y_continuous(breaks = seq(0, 7500, 2500)) +
-  labs(x = "Fuentes con mayor emisiÛn media entre 1990???2016", y = "EmisiÛn de CO2 en Gg")
+  labs(x = "Fuentes con mayor emisi√≥n media entre 1990???2016", y = "Emisi√≥n de CO2 en Gg")
 
 ```
+LO MISMO QUE EN EL ANTERIOR USAR `filter(fuente%in%c("CE_SP","Q_B","T","BI","I"))`.
 
-6. Usando la librerÌa ggplot2 y ggpmisc replique el siguiente gr·fico de las emisiones totales entre 1990 y 2016.
-Los puntos rojos indican los m·ximos locales  o picos de emisiÛn de CO2 en Gg. 
-Use `library(help = ggpmisc)` para ver todas las funciones de la librerÌa ggpmisc e identificar cual o cuales necesita para replicar el gr·fico.
-Incluir un `caption` en la figura con alg˙n comentario de interÈs que describa el gr·fico.
+6. Usando la librer√≠a ggplot2 y ggpmisc replique el siguiente gr√°fico de las emisiones totales entre 1990 y 2016.
+Los puntos rojos indican los m√°ximos locales  o picos de emisi√≥n de CO2 en Gg. 
+Use `library(help = ggpmisc)` para ver todas las funciones de la librer√≠a ggpmisc e identificar cual o cuales necesita para replicar el gr√°fico.
+Incluir un `caption` en la figura con alg√∫n comentario de inter√©s que describa el gr√°fico.
 
 ![](ggmisc.pdf)
 \newpage
@@ -147,15 +154,15 @@ Incluir un `caption` en la figura con alg˙n comentario de interÈs que describa e
 #install.packages('ggpmisc')
 library(ggpmisc)
 
-cap3 <- "Se observa un comportamiento ciclico ascendente, donde desp˙es de un pico hay un caÌda para luego volver a subir en mayor grado que el pico anterior.  "
+cap3 <- "Se observa un comportamiento ciclico ascendente, donde desp√∫es de un pico hay un ca√≠da para luego volver a subir en mayor grado que el pico anterior.  "
 
 dato_emision %>%
   filter(fuente == 'TOTAL') %>%
   filter(!is.na(emision)) %>%
-  ggplot(aes(x = A—O, y = emision)) +
+  ggplot(aes(x = A√ëO, y = emision)) +
   geom_line() +
   geom_point() +
-  labs(x = "AÒo", y = "EmisiÛn de CO2 en Gg") +
+  labs(x = "A√±o", y = "Emisi√≥n de CO2 en Gg") +
   stat_peaks(colour = "red") +
   stat_peaks(geom = "text",
   colour = "red",
@@ -163,29 +170,28 @@ dato_emision %>%
   
 ```
 
-
+BIEN!
 ## Ejercicio 2
 
-Los datos que vamos a utilizar en este ejercicio est·n disponibles en el cat·logo de datos abiertos uruguay https://catalogodatos.gub.uy.
+Los datos que vamos a utilizar en este ejercicio est√°n disponibles en el cat√°logo de datos abiertos uruguay https://catalogodatos.gub.uy.
 
-Los datos que seleccionÈ son sobre los gastos realizados por actos mÈdicos.
+Los datos que seleccion√© son sobre los gastos realizados por actos m√©dicos.
 Los datos y los metadatos se encuentran disponibles en:
 
 https://catalogodatos.gub.uy/dataset/gasto_am_2016_fondo-nacional-de-recursos/resource/936ac9e6-b0f6-424a-9b53-ee408a91fd6f
 
-Este ejercicio tiene como objetivo que realice un an·lisis exploratorio de datos utilizando todo lo aprendido en el curso.
+Este ejercicio tiene como objetivo que realice un an√°lisis exploratorio de datos utilizando todo lo aprendido en el curso.
 Debe contener al menos 5 preguntas orientadoras y visualizaciones apropiadas para responderlas. 
-La exploraciÛn deber· contener las preguntas a responder sus respuestas con el correspondiente resumen de informaciÛn o visualizaciÛn. 
-Incluya en su exploraciÛn el an·lisis de la variabilidad tanto de  variables cuantitativas como cualitativas y covariaciones entre las mismas. 
-Recuerde que en las visualizaciones, las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con alg˙n comentario de interÈs que describa el gr·fico.
+La exploraci√≥n deber√° contener las preguntas a responder sus respuestas con el correspondiente resumen de informaci√≥n o visualizaci√≥n. 
+Incluya en su exploraci√≥n el an√°lisis de la variabilidad tanto de  variables cuantitativas como cualitativas y covariaciones entre las mismas. 
+Recuerde que en las visualizaciones, las etiquetas de los ejes deben ser claras y describir las variables involucradas. Incluir un `caption` en la figura con alg√∫n comentario de inter√©s que describa el gr√°fico.
 
 ```{r, echo = FALSE}
 
-gastos <- read.csv("gastosmed.csv", header = TRUE, dec = ",") 
-
+gastos <- read.csv("gastomed.csv", header = TRUE, dec = ",",encoding="latin1") 
 ```
 
-Para comenzar la exploraciÛn vamos a ver que variables contiene la base de datos y a realizar un pequeÒo an·lisis de las mismas para luego plantearnos las preguntas de exploraciÛn.
+Para comenzar la exploraci√≥n vamos a ver que variables contiene la base de datos y a realizar un peque√±o an√°lisis de las mismas para luego plantearnos las preguntas de exploraci√≥n.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -194,17 +200,17 @@ b <- str(gastos)
 
 ```
 
-La base se compone de 9 variables, de las cuales 6 son categÛricas (PrestaciÛn, Sexo, Departamento_residencia, Prestador, Prestador_tipo y Prestador_departamento), 2 continuas (Edad e Importe) quedando la variable Paciente sin clasificar ya que por su definiciÛn no la vamos a utilizar, esta nos indica el n˙mero de paciente.
+La base se compone de 9 variables, de las cuales 6 son categ√≥ricas (Prestaci√≥n, Sexo, Departamento_residencia, Prestador, Prestador_tipo y Prestador_departamento), 2 continuas (Edad e Importe) quedando la variable Paciente sin clasificar ya que por su definici√≥n no la vamos a utilizar, esta nos indica el n√∫mero de paciente.
 
-Con respecto a los datos faltantes en la mayorÌa de las variables existe la opciÛn "Otro" que no necesariamente refiere a Èstos, a lo largo del an·lisis veremos que importancia tienen. La ˙nica variables que tiene la opciÛn "SIN DATO" es Prestador_departamento, la cual en un principio la incluimos en el an·lisis.
+Con respecto a los datos faltantes en la mayor√≠a de las variables existe la opci√≥n "Otro" que no necesariamente refiere a √©stos, a lo largo del an√°lisis veremos que importancia tienen. La √∫nica variables que tiene la opci√≥n "SIN DATO" es Prestador_departamento, la cual en un principio la incluimos en el an√°lisis.
 
-##An·lisis exploratorio.
+##An√°lisis exploratorio.
 
-1. La primer pregunta que me surge es cu·les son las prestaciones m·s brindadas por lo prestadores de salud. Para poder visualizar esto se realiza un gr·fico de barras ordenado por la frecuencia de las prestaciones.
+1. La primer pregunta que me surge es cu√°les son las prestaciones m√°s brindadas por lo prestadores de salud. Para poder visualizar esto se realiza un gr√°fico de barras ordenado por la frecuencia de las prestaciones.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap4}
 
-cap4 <- "A partir del gr·fico se puede  observar que hay un total de 30 prestaciones, observandose una gran concentraciÛn en las tres m·s frecuentes: PCI-Cateterismo izq.adultos,DIALISIS-HEMODIALISIS y PCI-ATCP c/cateterismo izq."
+cap4 <- "A partir del gr√°fico se puede  observar que hay un total de 30 prestaciones, observandose una gran concentraci√≥n en las tres m√°s frecuentes: PCI-Cateterismo izq.adultos,DIALISIS-HEMODIALISIS y PCI-ATCP c/cateterismo izq."
 
 gastos %>%
   ggplot(aes(x = fct_infreq(Prestacion))) +
@@ -214,7 +220,9 @@ gastos %>%
 
 ```
 
-Para verificar la observaciÛn mencionada en el gr·fico vamos a realizar la tabla de frecuencias relativas y acumuladas.
+BIEN!!
+
+Para verificar la observaci√≥n mencionada en el gr√°fico vamos a realizar la tabla de frecuencias relativas y acumuladas.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 
@@ -226,13 +234,13 @@ gastos %>%
 
 ```
 
-La tabla nos muestra que las tres prestaciones m·s brindadas representan el 50% del total.
+La tabla nos muestra que las tres prestaciones m√°s brindadas representan el 50% del total.
 
-2. Luego de explorar cuales son las prestaciones m·s habituales me interesa ver en dÛnde se realizan, para lo que realizamos un gr·fico de barras por departamento del prestador.
+2. Luego de explorar cuales son las prestaciones m√°s habituales me interesa ver en d√≥nde se realizan, para lo que realizamos un gr√°fico de barras por departamento del prestador.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.cap = cap5}
 
-cap5 <- "Del gr·fico se desprende que la amplia mayoria de prestaciones se brindan en el departamento de Montevideo, segudio por Canelones, Maldonado y Colonia, todos departamentos del Sur del paÌs."
+cap5 <- "Del gr√°fico se desprende que la amplia mayoria de prestaciones se brindan en el departamento de Montevideo, segudio por Canelones, Maldonado y Colonia, todos departamentos del Sur del pa√≠s."
 
 gastos %>%
   ggplot(aes(x = fct_infreq(Prestador_departamento))) +
@@ -241,12 +249,13 @@ gastos %>%
   labs(y = "Frecuencia", x = "Departamento del prestador de salud")
 
 ```
+BIEN
 
-3. A partir de lo observado en los gr·ficos anteriores me interesa separar los departamentos de los prestadores de salud en dos categorÌas, Montevideo e Interior, y observar si las principales prestaciones estan concentradas en Montevideo o no.
+3. A partir de lo observado en los gr√°ficos anteriores me interesa separar los departamentos de los prestadores de salud en dos categor√≠as, Montevideo e Interior, y observar si las principales prestaciones estan concentradas en Montevideo o no.
 
 ```{r, echo=FALSE,message = FALSE, warning = FALSE, fig.cap = cap6}
 
-cap6 <- "En el gr·fico podemos observar que las tres prestaciones observadas al principio siguen siendo las m·s habituales tanto para Montevideo como el Interior.TambiÈn se observa claramente como todas las prestaciones se brindan en mayor medida en Montevideo"
+cap6 <- "En el gr√°fico podemos observar que las tres prestaciones observadas al principio siguen siendo las m√°s habituales tanto para Montevideo como el Interior.Tambi√©n se observa claramente como todas las prestaciones se brindan en mayor medida en Montevideo"
 
 gastos %>%
   mutate(Ubicacion = ifelse(
@@ -261,12 +270,13 @@ gastos %>%
   labs(y = "Frecuencia", x = "Prestaciones")
 
 ```
+BUEN USO DEL `ifelse` en `mutate`
 
-4. Separando los departamentos en la categorÌas Montevideo e Interior, esta ˙ltima desgrlozada por los departamentos que la componen, quiero ver que tipo de prestadores predominan (salud publica, mutualistas, seguros privados, etc). Se realizan dos gr·ficos, uno para cada categorÌa.
+4. Separando los departamentos en la categor√≠as Montevideo e Interior, esta √∫ltima desgrlozada por los departamentos que la componen, quiero ver que tipo de prestadores predominan (salud publica, mutualistas, seguros privados, etc). Se realizan dos gr√°ficos, uno para cada categor√≠a.
 
 ```{r,echo=FALSE,message = FALSE, warning = FALSE, fig.cap = cap7}
 
-cap7 <- "Se observa en todos los departamentos que la mayoria de los prestadores son privados (mutualistas o coperativas). No hay seguros privados ni otros y vemos que la categorÌa SIN DATO dentro de la variable Prestador_departamento corresponde a servicios de ASSE"
+cap7 <- "Se observa en todos los departamentos que la mayoria de los prestadores son privados (mutualistas o coperativas). No hay seguros privados ni otros y vemos que la categor√≠a SIN DATO dentro de la variable Prestador_departamento corresponde a servicios de ASSE"
 
 gastos %>%
   filter(Prestador_departamento != 'MONTEVIDEO') %>%
@@ -276,10 +286,11 @@ gastos %>%
   labs(x = "Departamentos del Interior", y = "Frecuencia", fill = "Tipo de prestador")
   
 ```
+BIEN, EN ESTE CASO CON BARRAS APILADAS AL 100% SER√çA M√ÅS SENCILLA LA COMPARACI√ìN 
 
 ```{r,echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap8}
 
-cap8 <- "En Montevideo tambiÈn se observa una amplia mayorÌa de prestadores privados, incluyendo todas las opciones (mutualistas, seguros privados)."
+cap8 <- "En Montevideo tambi√©n se observa una amplia mayor√≠a de prestadores privados, incluyendo todas las opciones (mutualistas, seguros privados)."
 
 gastos %>%
   filter(Prestador_departamento == 'MONTEVIDEO') %>%
@@ -289,9 +300,11 @@ gastos %>%
 
 ```
 
-En conclusiÛn, para todo el paÌs predominan los servicios prestados por prestadores privados.
+En conclusi√≥n, para todo el pa√≠s predominan los servicios prestados por prestadores privados.
 
-5. Luego de explorar la frecuencia de las prestaciones y como se relacionaban con los departamentos de los prestadores me interesa ver si la frecuencia de las mismas est· relacionada con el gasto. Para esto realizamos un cuadro donde se muestra el top 10 de las prestaciones con mayor gasto total.
+EN ESTE CASO HUBIERA QUEDADO MEJOR UN FACET MONTEVIDEO INTERIOR
+
+5. Luego de explorar la frecuencia de las prestaciones y como se relacionaban con los departamentos de los prestadores me interesa ver si la frecuencia de las mismas est√° relacionada con el gasto. Para esto realizamos un cuadro donde se muestra el top 10 de las prestaciones con mayor gasto total.
 
 ```{r,echo=FALSE}
 
@@ -302,49 +315,55 @@ gastos %>%
   top_n(10)
 
 ```
-Podemos observar que dos de las prestaciones que observamos como las m·s frecuentes se encuentran tambiÈn en el top 3 de mayor gasto, quedando PCI-Cateterismo izq.adultos ensÈptimo lugar con respecto al gasto.
+Podemos observar que dos de las prestaciones que observamos como las m√°s frecuentes se encuentran tambi√©n en el top 3 de mayor gasto, quedando PCI-Cateterismo izq.adultos ens√©ptimo lugar con respecto al gasto.
 
 6.Pasando a los pacientes, lo primero que me interesa  ver es la cantidad de pacientes por edad separados por sexo.
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap9}
 
-cap9 <- "Parece haber m·s pacientes del sexo masculino los cuales tienen un pico en el entorno de los 70 aÒÛs. Las mujeres parecen tener dos picos, el priero en el entorno de los 50 aÒos y luego otro entorno a las 70 como los hombres"
+cap9 <- "Parece haber m√°s pacientes del sexo masculino los cuales tienen un pico en el entorno de los 70 a√±√≥s. Las mujeres parecen tener dos picos, el priero en el entorno de los 50 a√±os y luego otro entorno a las 70 como los hombres"
 
 gastos %>%
-  ggplot(aes(Edad_a√.os, fill = Sexo)) + #uso fill porque me gusta que el grafico tenga color
+  ggplot(aes(Edad_a√±os, fill = Sexo)) + #uso fill porque me gusta que el grafico tenga color
   geom_bar() +
   facet_wrap( ~ Sexo) +
-  labs(x =  "Edad", y = "N˙mero de pacientes")
+  labs(x =  "Edad", y = "N√∫mero de pacientes")
 
 ```
 
-7. En segundo lugar, me interesa ver la cantidad de pacientes de las tres prestaciones m·s brindadas por edad y por sexo para lo que se realiza un gr·fico de barras.
+
+BIEN!
+7. En segundo lugar, me interesa ver la cantidad de pacientes de las tres prestaciones m√°s brindadas por edad y por sexo para lo que se realiza un gr√°fico de barras.
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap10}
 
-cap10 <- "En relaciÛn a las tres prestaciones m·s brindadas es m·s notoria la diferencia de pacientes por sexo siendo los hombres quines m·s reciben estas prestaciones. Para ambos casos los picos se dan entorno a los 70 aÒos."
+cap10 <- "En relaci√≥n a las tres prestaciones m√°s brindadas es m√°s notoria la diferencia de pacientes por sexo siendo los hombres quines m√°s reciben estas prestaciones. Para ambos casos los picos se dan entorno a los 70 a√±os."
 
 gastos %>%
   filter(Prestacion == c("DIALISIS - HEMODIALISIS","PCI-ATCP c/cateterismo izq.","PCI-Cateterismo izq.adultos")) %>%
-  ggplot(aes(Edad_a√.os, fill = Prestacion)) +
+  ggplot(aes(Edad_a√±os, fill = Prestacion)) +
   geom_bar() +
   facet_wrap(~Sexo) +
-  labs(x = "Edad", y = "N˙mero de pacientes", fill = "Top 3 prestacines")
+  labs(x = "Edad", y = "N√∫mero de pacientes", fill = "Top 3 prestacines")
   
 ```
+BIEN, TAL VEZ USANDO TRANSPARENCIAS SE PARECIA MEJOR O CON DENSIDADES
 
-8. Por ˙ltimo, quiero ver si el gasto esta relacionado a la edad y sexo de los pacientes por lo que realizamos un g·fico de dispersiÛn entre edad e importe separado por sexo.
+8. Por √∫ltimo, quiero ver si el gasto esta relacionado a la edad y sexo de los pacientes por lo que realizamos un g√°fico de dispersi√≥n entre edad e importe separado por sexo.
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.cap = cap11}
 
-cap11 <-"Claramente el gr·fico realizado no es una buena visualizaciÛn de nuestra pregunta de exploraciÛn, en este caso habrÌa que evaluar otras estrategÌas que logren mostrar de manera m·s clara si existe alguna relaciÛn entre las variables seleccionadas. A mi entender el principal problema es la variabilidad de valores que toma la variable Importe lo que genera una escala muy grande y no permite una buena visualizaciÛn. Una estrategia podrÌa ser separar los valores de Importes en rangos y visualizar cada uo por separado. "
+cap11 <-"Claramente el gr√°fico realizado no es una buena visualizaci√≥n de nuestra pregunta de exploraci√≥n, en este caso habr√≠a que evaluar otras estrateg√≠as que logren mostrar de manera m√°s clara si existe alguna relaci√≥n entre las variables seleccionadas. A mi entender el principal problema es la variabilidad de valores que toma la variable Importe lo que genera una escala muy grande y no permite una buena visualizaci√≥n. Una estrategia podr√≠a ser separar los valores de Importes en rangos y visualizar cada uo por separado. "
 
 gastos %>%
-  ggplot(aes(Edad_a√.os, Importe, colour = Sexo)) + #uso colour porque me gusta  el gr·fico con colores
+  ggplot(aes(Edad_a√±os, Importe, colour = Sexo)) + #uso colour porque me gusta  el gr√°fico con colores
   geom_point() +
   facet_wrap( ~ Sexo) +
   labs(x = "Edad", y = "Importe en $")
   
 ```
 
-Quedaron un montÛn de preguntas sin exponer ya que la idea del trabajo es mostrar una pequeÒa parte del an·lisis exploratorio intentando cubbrir todas las variables y las diferentes relaciones entre ellas.
+Quedaron un mont√≥n de preguntas sin exponer ya que la idea del trabajo es mostrar una peque√±a parte del an√°lisis exploratorio intentando cubbrir todas las variables y las diferentes relaciones entre ellas.
+
+
+BUEN TRABAJO, BIEN PRESENTADO Y COMENTADO, ME GUST√ì LA EXPLORACI√ìN. HAY QUE VER PORQUE NO TE COMPILA Y ARREGLAR ALGUNOS ERRORES DE TIPEO PUNTOS:100/100
